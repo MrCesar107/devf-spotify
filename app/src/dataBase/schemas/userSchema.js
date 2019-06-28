@@ -19,7 +19,7 @@ const UserSchema = new Schema({
 });
 
 mongoose.Types.ObjectId.prototype.valueOf = function() {
-  return this.toSting();
+  return this.toString();
 }
 
 module.exports = UserSchema;
