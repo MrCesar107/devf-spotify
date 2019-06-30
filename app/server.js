@@ -6,15 +6,18 @@ const { ApolloServer } = require('apollo-server')
 const mongoose = require("mongoose")
 
 // importar variables para configurar el servidor de graphql
-const typeDefs = require('./graphql/schema')
-const resolvers = require('./graphql/resolvers')
-const { getContext, AuthDirective } = require('./actions/authActions')
+const typeDefs = require('./src/graphql/schema')
+const resolvers = require('./src/graphql/resolvers')
+const { getContext, AuthDirective } = require('./src/actions/authActions')
 
 // parametros de la conexion a la base de datos
-mongoose.connect(process.env.URL_DATABASE, {
-  userCreateIndex: true,
-  userNewUrlParser: true
-})
+mongoose.connect(
+  process.env.URL_DATABASE,
+  {
+    useCreateIndex: true,
+    useNewUrlParser: true,
+  }
+);
 
 // crea la conexion a la base de datos
 const mongo = mongoose.connection

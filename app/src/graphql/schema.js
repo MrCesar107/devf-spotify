@@ -11,7 +11,7 @@ const { gql } = require('apollo-server');
 // ejecutarce
 
 const typeDefs = gql`
-  directive @AuthDirective on QUERY | FIELD_DESTINATION | FIELD
+  directive @AuthDirective on QUERY | FIELD_DEFINITION | FIELD
 
   type Auth {
     token: String
@@ -22,7 +22,7 @@ const typeDefs = gql`
     message: String
   }
 
-  type UserInput {
+  input UserInput {
     name: String!
     lastName: String!
     email: String!
@@ -41,4 +41,4 @@ const typeDefs = gql`
 `
 
 // exportamos typeDefs
-module.exports = typeDefs;
+module.exports = typeDefs
