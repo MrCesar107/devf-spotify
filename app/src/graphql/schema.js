@@ -29,14 +29,24 @@ const typeDefs = gql`
     password: String!
   }
 
+  input AdminInput {
+    name: String!
+    lastName: String!
+    email: String!
+    password: String!
+    isPrivate: Boolean = true
+  }
+
   type Query {
     queryWithLogin: Message @AuthDirective
     simpleQuery: Message
   }
 
   type Mutation {
-    signup(data: UserInput): Auth
-    login(email: String!, password: String!): Auth
+    userSignup(data: UserInput): Auth
+    userLogin(email: String!, password: String!): Auth
+    adminSignup(data: AdminInput): Auth
+    adminLogin(email: String!, password: String!): Auth
   }
 `
 

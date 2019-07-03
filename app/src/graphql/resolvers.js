@@ -2,7 +2,11 @@
 const { UserModel } = require('../dataBase/models')
 
 // importamos las acciones(logica de negocio para los resolvers)
-const { loginAction, signUpAction } = require('../actions/userActions')
+const { loginAction,signUpAction } = require('../actions/userActions')
+const { 
+  adminLoginAction,
+  adminSignUpAction
+} = require('../actions/adminActions')
 
 // Resolvers funciones que son la logica del negocio y son acciones que define
 // como se comportan las queries y las mutations
@@ -22,7 +26,7 @@ const resolvers = {
   },
 
   Mutation: {
-    signup: (parent, args, content, info) => {
+    userSignup: (parent, args, content, info) => {
       return signUpAction({ ...args.data }).then(result => {
         return result
       }).catch(err => {
@@ -30,12 +34,29 @@ const resolvers = {
       })
     },
 
-    login: (parent, args, content, info) => {
+    userLogin: (parent, args, content, info) => {
       const { email, password } = args;
       return loginAction(email, password).then(result => {
         return result
       }).catch(err => {
         return err;
+      })
+    },
+
+    adminSignup: (parent, args, content, info) => {
+      return adminSignUpAction({ ...args.data }).then(result => {
+        return result
+      }).catch(err => {
+        return err
+      })
+    },
+
+    adminLogin: (parent, args, content, info) => {
+      const { email, password } = args
+      return adminLoginAction(email, password).then(result => {
+        return result
+      }).catch(err => {
+        return err
       })
     }
   }
