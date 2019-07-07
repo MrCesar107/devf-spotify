@@ -9,6 +9,7 @@ const {
   adminSignUpAction
 } = require('../actions/adminActions')
 const { createAlbumAction } = require('../actions/albumActions')
+const { createArtistAction } = require('../actions/artistActions')
 
 // Resolvers funciones que son la logica del negocio y son acciones que define
 // como se comportan las queries y las mutations
@@ -65,6 +66,14 @@ const resolvers = {
 
     createAlbum: (parent, args, context, info) => {
       return createAlbumAction({ ...args.albumData }).then(result => {
+        return result
+      }).catch(err => {
+        return err
+      })
+    },
+
+    createArtist: (parent, args, context, info) => {
+      return createArtistAction({ ...args.artistData }).then(result => {
         return result
       }).catch(err => {
         return err

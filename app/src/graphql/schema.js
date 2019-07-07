@@ -45,6 +45,12 @@ const typeDefs = gql`
     coverPage: String
   }
 
+  input ArtistInput {
+    name: String!
+    bio: String
+    profile: String
+  }
+
   type Query {
     queryWithLogin: Message @AuthDirective
     simpleQuery: Message
@@ -56,6 +62,7 @@ const typeDefs = gql`
     adminSignup(data: AdminInput): Auth
     adminLogin(email: String!, password: String!): Auth
     createAlbum(albumData: AlbumInput) : Message @AdminAuthDirective
+    createArtist(artistData: ArtistInput) : Message @AdminAuthDirective
   }
 `
 
