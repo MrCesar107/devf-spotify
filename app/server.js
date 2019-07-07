@@ -8,7 +8,12 @@ const mongoose = require("mongoose")
 // importar variables para configurar el servidor de graphql
 const typeDefs = require('./src/graphql/schema')
 const resolvers = require('./src/graphql/resolvers')
-const { getContext, AuthDirective } = require('./src/actions/authActions')
+const {
+  getContext,
+  AuthDirective,
+  getAdminContext,
+  AdminAuthDirective
+} = require('./src/actions/authActions')
 
 // parametros de la conexion a la base de datos
 mongoose.connect(
@@ -33,7 +38,8 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   schemaDirectives: {
-    AuthDirective: AuthDirective
+    AuthDirective: AuthDirective,
+    AdminAuthDirective: AdminAuthDirective
   },
   context: async({ req }) => getContext(req)
 })

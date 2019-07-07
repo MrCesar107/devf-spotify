@@ -1,6 +1,7 @@
 // paquetes que necesitamos iportar
 const JWT = require('jsonwebtoken');
 const { UserModel } =  require('../dataBase/models')
+const { AdminModel } = require('../dataBase/models')
 
 const { SchemaDirectiveVisitor,
         AuthenticationError } = require('apollo-server-express')
@@ -12,11 +13,24 @@ class AuthDirective extends SchemaDirectiveVisitor {
     const { resolve = defaultFieldResolver } = field;
     field.resolve = async function(...args) {
       const ctx = args[2]
-
       if (ctx.user) {
         return await resolve.apply(this, args)
       } else {
         throw new AuthenticationError("You need to be logged in.")
+      }
+    }
+  }
+}
+
+class AdminAuthDirective extends SchemaDirectiveVisitor {
+  visitFieldDefinition(field) {
+    const { resolve = defaultFieldResolver } = field
+    field.resolve = async function(...args) {
+      const ctx = args[2]
+      if (ctx.admin) {
+        return await resolve.apply(this, args)
+      } else {
+        throw new AuthenticationError("You need to be admin to do this action.")
       }
     }
   }
@@ -35,11 +49,21 @@ const getContext = (req) => {
   if (typeof token === typeof undefined) return req
   return JWT.verify(token, process.env.SECRET, function(err, result) {
     if (err) return req
-    return UserModel.findOne({ _id: result.id }).then((user) => {
-      return { ...req, user }
-    })
+    if (typeof result.isPrivate === typeof undefined) {
+      return UserModel.findOne({ _id: result._id }).then((user) => {
+        return { ...req, user }
+      })
+    } else {
+      return AdminModel.findOne({ _id: result._id }).then((admin) => {
+        return { ...req, admin }
+      })
+    }
   })
 }
 
 // exportamos el contexto y la directiva
-module.exports = { getContext, AuthDirective }
+module.exports = {
+  getContext,
+  AuthDirective,
+  AdminAuthDirective
+}

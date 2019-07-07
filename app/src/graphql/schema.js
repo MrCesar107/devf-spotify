@@ -12,6 +12,7 @@ const { gql } = require('apollo-server');
 
 const typeDefs = gql`
   directive @AuthDirective on QUERY | FIELD_DEFINITION | FIELD
+  directive @AdminAuthDirective on QUERY | FIELD_DEFINITION | FIELD
 
   type Auth {
     token: String
@@ -37,6 +38,13 @@ const typeDefs = gql`
     isPrivate: Boolean = true
   }
 
+  input AlbumInput {
+    name: String!
+    artist: String!
+    year: String!
+    coverPage: String
+  }
+
   type Query {
     queryWithLogin: Message @AuthDirective
     simpleQuery: Message
@@ -47,6 +55,7 @@ const typeDefs = gql`
     userLogin(email: String!, password: String!): Auth
     adminSignup(data: AdminInput): Auth
     adminLogin(email: String!, password: String!): Auth
+    createAlbum(albumData: AlbumInput) : Message @AdminAuthDirective
   }
 `
 

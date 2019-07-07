@@ -16,6 +16,7 @@ const createToken = (adminData) => {
     _id: adminData._id,
     email: adminData.email,
     name: adminData.name,
+    isPrivate: adminData.isPrivate,
     exp
   }
 

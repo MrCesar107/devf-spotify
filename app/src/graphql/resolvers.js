@@ -1,12 +1,14 @@
 // importamos los modelos de la base de datos
 const { UserModel } = require('../dataBase/models')
+const { AdminModel } = require('../dataBase/models')
 
 // importamos las acciones(logica de negocio para los resolvers)
-const { loginAction,signUpAction } = require('../actions/userActions')
+const { loginAction, signUpAction } = require('../actions/userActions')
 const { 
   adminLoginAction,
   adminSignUpAction
 } = require('../actions/adminActions')
+const { createAlbumAction } = require('../actions/albumActions')
 
 // Resolvers funciones que son la logica del negocio y son acciones que define
 // como se comportan las queries y las mutations
@@ -16,6 +18,7 @@ const {
 // info
 
 const resolvers = {
+
   Query: {
     queryWithLogin: () => {
       return { message: 'Esto es un query con login' }
@@ -54,6 +57,14 @@ const resolvers = {
     adminLogin: (parent, args, content, info) => {
       const { email, password } = args
       return adminLoginAction(email, password).then(result => {
+        return result
+      }).catch(err => {
+        return err
+      })
+    },
+
+    createAlbum: (parent, args, context, info) => {
+      return createAlbumAction({ ...args.albumData }).then(result => {
         return result
       }).catch(err => {
         return err
