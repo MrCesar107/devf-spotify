@@ -11,6 +11,9 @@ const {
 const { createAlbumAction } = require('../actions/albumActions')
 const { createArtistAction } = require('../actions/artistActions')
 
+// importamos las utilidades
+const { storeUpload } = require('../utils/uploader')
+
 // Resolvers funciones que son la logica del negocio y son acciones que define
 // como se comportan las queries y las mutations
 // parent --- es lo que necesita la funcion para que funcione como un resolver
@@ -64,8 +67,17 @@ const resolvers = {
       })
     },
 
-    createAlbum: (parent, args, context, info) => {
-      return createAlbumAction({ ...args.albumData }).then(result => {
+    createAlbum: async (parent, args, context, info) => {
+      const { createReadStream } = await args.albumData.coverPage
+      const stream = createReadStream()
+      const { url } = await storeUpload(stream)
+      const albumInfo = {
+        name: args.albumData.name,
+        artist: args.albumData.artist,
+        year: args.albumData.year,
+        coverPage: url
+      }
+      return createAlbumAction(albumInfo).then(result => {
         return result
       }).catch(err => {
         return err

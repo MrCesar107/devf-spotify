@@ -42,7 +42,7 @@ const typeDefs = gql`
     name: String!
     artist: String!
     year: String!
-    coverPage: String
+    coverPage: Upload
   }
 
   input ArtistInput {
