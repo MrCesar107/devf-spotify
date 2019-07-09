@@ -11,7 +11,6 @@ const resolvers = require('./src/graphql/resolvers')
 const {
   getContext,
   AuthDirective,
-  getAdminContext,
   AdminAuthDirective
 } = require('./src/actions/authActions')
 

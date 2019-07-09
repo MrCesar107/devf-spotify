@@ -10,6 +10,7 @@ const {
 } = require('../actions/adminActions')
 const { createAlbumAction } = require('../actions/albumActions')
 const { createArtistAction } = require('../actions/artistActions')
+const { createSongAction } = require('../actions/songActions')
 
 // importamos las utilidades
 const { storeUpload } = require('../utils/uploader')
@@ -86,6 +87,14 @@ const resolvers = {
 
     createArtist: (parent, args, context, info) => {
       return createArtistAction({ ...args.artistData }).then(result => {
+        return result
+      }).catch(err => {
+        return err
+      })
+    },
+
+    createSong: (parent, args, context, info) => {
+      return createSongAction({ ...args.songData }).then(result => {
         return result
       }).catch(err => {
         return err

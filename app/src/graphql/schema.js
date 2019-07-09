@@ -51,6 +51,13 @@ const typeDefs = gql`
     profile: String
   }
 
+  input SongInput {
+    name: String!
+    artist: String!
+    source: String!
+    duration: String
+  }
+
   type Query {
     queryWithLogin: Message @AuthDirective
     simpleQuery: Message
@@ -63,6 +70,7 @@ const typeDefs = gql`
     adminLogin(email: String!, password: String!): Auth
     createAlbum(albumData: AlbumInput) : Message @AdminAuthDirective
     createArtist(artistData: ArtistInput) : Message @AdminAuthDirective
+    createSong(songData: SongInput) : Message @AdminAuthDirective
   }
 `
 
