@@ -60,7 +60,7 @@ const typeDefs = gql`
   input SongInput {
     name: String!
     artist: String!
-    source: String!
+    source: Upload!
     duration: String
   }
 

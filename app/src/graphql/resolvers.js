@@ -15,7 +15,7 @@ const { createArtistAction } = require('../actions/artistActions')
 const { createSongAction } = require('../actions/songActions')
 
 // importamos las utilidades
-const { storeUpload } = require('../utils/uploader')
+const { storeUpload, musicStoreUpload } = require('../utils/uploader')
 
 // Resolvers funciones que son la logica del negocio y son acciones que define
 // como se comportan las queries y las mutations
@@ -131,8 +131,18 @@ const resolvers = {
       })
     },
 
-    createSong: (parent, args, context, info) => {
-      return createSongAction({ ...args.songData }).then(result => {
+    createSong: async (parent, args, context, info) => {
+      const { admin } = context
+      const { createReadStream } = await args.songData.source
+      const stream = createReadStream()
+      const { url } = await musicStoreUpload(stream)
+      const songInfo = {
+        name: args.songData.name,
+        artist: args.songData.artist,
+        source: url,
+        duration: ""
+      }
+      return createSongAction(songInfo).then(result => {
         return result
       }).catch(err => {
         return err

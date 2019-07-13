@@ -20,5 +20,23 @@ function storeUpload(stream) {
   })
 }
 
+function musicStoreUpload(stream) {
+  cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET
+  })
+
+  return new Promise((resolve, reject) => {
+    const buffer = cloudinary.v2.uploader
+      .upload_stream(
+        { resource_type: "video" }, (err, result) => {
+        if (err) reject(err)
+        resolve(result)
+      })
+      stream.pipe(buffer)
+  })
+}
+
 // exportamos la funcion
-module.exports = { storeUpload }
+module.exports = { storeUpload, musicStoreUpload }
