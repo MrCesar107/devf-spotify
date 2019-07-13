@@ -54,7 +54,7 @@ const typeDefs = gql`
   input ArtistInput {
     name: String!
     bio: String
-    profile: String
+    profile: Upload
   }
 
   input SongInput {

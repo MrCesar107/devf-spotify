@@ -112,9 +112,17 @@ const resolvers = {
       })
     },
 
-    createArtist: (parent, args, context, info) => {
+    createArtist: async (parent, args, context, info) => {
       const { admin } = context
-      return createArtistAction({ ...args.artistData }).then(artist => {
+      const { createReadStream } = await args.artistData.profile
+      const stream = createReadStream()
+      const { url } = await storeUpload(stream)
+      const artistInfo = {
+        name: args.artistData.name,
+        bio: args.artistData.bio,
+        profile: url
+      }
+      return createArtistAction(artistInfo).then(artist => {
         return addArtistToAdminAction(artist, admin).then((message) => {
           return (message)
         })
