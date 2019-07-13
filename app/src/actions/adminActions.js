@@ -48,4 +48,22 @@ const adminLoginAction = (email, password) => {
   })
 }
 
-module.exports = { adminLoginAction, adminSignUpAction }
+const addArtistToAdminAction = (artistData, adminData) => {
+  return new Promise((resolve, reject) => {
+    AdminModel.findByIdAndUpdate(
+      adminData._id,
+      { $push: { artists: artistData.artist._id } },
+      { new: true }
+    )
+      .exec()
+      .then(() => {
+        resolve({ message: `se ha registrado al artista con exito` })
+      }).catch(err => reject(err));
+  });
+}
+
+module.exports = {
+  adminLoginAction,
+  adminSignUpAction,
+  addArtistToAdminAction
+}

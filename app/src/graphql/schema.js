@@ -23,6 +23,12 @@ const typeDefs = gql`
     message: String
   }
 
+  type Artist {
+    name: String
+    bio: String
+    profile: String
+  }
+
   input UserInput {
     name: String!
     lastName: String!
@@ -61,6 +67,8 @@ const typeDefs = gql`
   type Query {
     queryWithLogin: Message @AuthDirective
     simpleQuery: Message
+    getAdminArtists: [Artist] @AdminAuthDirective
+    getArtists: [Artist]
   }
 
   type Mutation {

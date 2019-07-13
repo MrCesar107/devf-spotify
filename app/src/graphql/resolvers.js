@@ -1,12 +1,14 @@
 // importamos los modelos de la base de datos
 const { UserModel } = require('../dataBase/models')
 const { AdminModel } = require('../dataBase/models')
+const { ArtistModel } = require('../dataBase/models')
 
 // importamos las acciones(logica de negocio para los resolvers)
 const { loginAction, signUpAction } = require('../actions/userActions')
 const { 
   adminLoginAction,
-  adminSignUpAction
+  adminSignUpAction,
+  addArtistToAdminAction
 } = require('../actions/adminActions')
 const { createAlbumAction } = require('../actions/albumActions')
 const { createArtistAction } = require('../actions/artistActions')
@@ -22,6 +24,16 @@ const { storeUpload } = require('../utils/uploader')
 // context -- se variables que se comparte atravez de todos los resolvers
 // info
 
+const register = (admin) => {
+  return new Promise((resolve, reject) => {
+    AdminModel.findOne(admin._id).populate('artists').exec(
+      function (err, adminInfo) {
+        resolve(adminInfo)
+      }
+    )
+  })
+}
+
 const resolvers = {
 
   Query: {
@@ -30,6 +42,20 @@ const resolvers = {
     },
     simpleQuery: () => {
       return { message: 'Esto es un simple query' }
+    },
+
+    getAdminArtists: (parent, args, context, info) => {
+      const { admin } = context
+      return register(admin).then(adminInfo => {
+        const data = adminInfo.artists
+        return data
+      })
+    },
+
+    getArtists: (parent, args, context, info) => {
+      return ArtistModel.find({}, (err, artists) => {
+        return artists
+      })
     }
   },
 
@@ -78,6 +104,7 @@ const resolvers = {
         year: args.albumData.year,
         coverPage: url
       }
+
       return createAlbumAction(albumInfo).then(result => {
         return result
       }).catch(err => {
@@ -86,8 +113,11 @@ const resolvers = {
     },
 
     createArtist: (parent, args, context, info) => {
-      return createArtistAction({ ...args.artistData }).then(result => {
-        return result
+      const { admin } = context
+      return createArtistAction({ ...args.artistData }).then(artist => {
+        return addArtistToAdminAction(artist, admin).then((message) => {
+          return (message)
+        })
       }).catch(err => {
         return err
       })

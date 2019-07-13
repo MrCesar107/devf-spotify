@@ -26,8 +26,13 @@ const AdminSchema = new Schema({
   isPrivate: {
     type: Boolean,
     required: true
-  }
-})
+  },
+
+  artists: [{
+    type: Schema.Types.ObjectId,
+    ref: 'artists'
+  }]
+}, {timestamps: true})
 
 mongoose.Types.ObjectId.prototype.valueOf = function() {
   return this.toString()
