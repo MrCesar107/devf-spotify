@@ -7,11 +7,6 @@ const AlbumSchema = new Schema({
     required: true
   },
 
-  artist: {
-    type: String,
-    required: true
-  },
-
   year: {
     type: String,
     required: true
@@ -19,6 +14,11 @@ const AlbumSchema = new Schema({
 
   coverPage: {
     type: String
+  },
+
+  songs: {
+    type: Schema.Types.ObjectId,
+    ref: "songs"
   }
 })
 

@@ -1,7 +1,7 @@
 // importamos los modelos de la base de datos
-const { UserModel } = require('../dataBase/models')
 const { AdminModel } = require('../dataBase/models')
 const { ArtistModel } = require('../dataBase/models')
+const { AlbumModel } = require('../dataBase/models')
 
 // importamos las acciones(logica de negocio para los resolvers)
 const { loginAction, signUpAction } = require('../actions/userActions')
@@ -10,8 +10,14 @@ const {
   adminSignUpAction,
   addArtistToAdminAction
 } = require('../actions/adminActions')
-const { createAlbumAction } = require('../actions/albumActions')
-const { createArtistAction } = require('../actions/artistActions')
+const {
+  createAlbumAction,
+  addSongToAlbumAction
+} = require('../actions/albumActions')
+const {
+  createArtistAction,
+  addAlbumToArtist
+} = require('../actions/artistActions')
 const { createSongAction } = require('../actions/songActions')
 
 // importamos las utilidades
@@ -100,15 +106,17 @@ const resolvers = {
       const { url } = await storeUpload(stream)
       const albumInfo = {
         name: args.albumData.name,
-        artist: args.albumData.artist,
         year: args.albumData.year,
         coverPage: url
       }
-
-      return createAlbumAction(albumInfo).then(result => {
-        return result
-      }).catch(err => {
-        return err
+      ArtistModel.findById(args.artist).then((artist) => {
+        return createAlbumAction(albumInfo).then(album => {
+          return addAlbumToArtist(album, artist).then((message) => {
+            return (message)
+          })
+        }).catch(err => {
+          return err
+        })
       })
     },
 
@@ -132,7 +140,6 @@ const resolvers = {
     },
 
     createSong: async (parent, args, context, info) => {
-      const { admin } = context
       const { createReadStream } = await args.songData.source
       const stream = createReadStream()
       const { url } = await musicStoreUpload(stream)
@@ -142,10 +149,15 @@ const resolvers = {
         source: url,
         duration: ""
       }
-      return createSongAction(songInfo).then(result => {
-        return result
-      }).catch(err => {
-        return err
+      AlbumModel.findById(args.album).then((album) => {
+        return createSongAction(songInfo).then(song => {
+          return addSongToAlbumAction(song, album)
+            .then((message) => {
+              return (message)
+          })
+        }).catch(err => {
+          return err
+        })
       })
     }
   }

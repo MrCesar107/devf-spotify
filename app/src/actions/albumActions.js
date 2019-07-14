@@ -8,4 +8,17 @@ const createAlbumAction = (albumData) => {
   })
 }
 
-module.exports = { createAlbumAction }
+const addSongToAlbumAction = (songData, albumData) => {
+  console.log(songData)
+  return new Promise((resolve, reject) => {
+    AlbumModel.findByIdAndUpdate(
+      albumData._id,
+      { $push: { songs: songData.song._id } },
+      { new: true }
+    ).exec().then(() => {
+      resolve({message: 'Se ha creado la cancion con exito'})
+    }).catch(err => reject(err))
+  })
+}
+
+module.exports = { createAlbumAction, addSongToAlbumAction }

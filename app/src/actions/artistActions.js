@@ -9,4 +9,16 @@ const createArtistAction = (artistData) => {
   })
 }
 
-module.exports = { createArtistAction }
+const addAlbumToArtist = (albumData, artistData) => {
+  return new Promise((resolve, reject) => {
+    ArtistModel.findByIdAndUpdate(
+      artistData._id,
+      { $push: { albums: albumData.album._id } },
+      { new: true }
+    ).exec().then(() => {
+      resolve({ message: 'El album se ha creado' })
+    }).catch((err) => reject(err))
+  })
+}
+
+module.exports = { createArtistAction, addAlbumToArtist }

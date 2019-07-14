@@ -46,7 +46,6 @@ const typeDefs = gql`
 
   input AlbumInput {
     name: String!
-    artist: String!
     year: String!
     coverPage: Upload
   }
@@ -76,9 +75,9 @@ const typeDefs = gql`
     userLogin(email: String!, password: String!): Auth
     adminSignup(data: AdminInput): Auth
     adminLogin(email: String!, password: String!): Auth
-    createAlbum(albumData: AlbumInput) : Message @AdminAuthDirective
+    createAlbum(artist: String!, albumData: AlbumInput) : Message @AdminAuthDirective
     createArtist(artistData: ArtistInput) : Message @AdminAuthDirective
-    createSong(songData: SongInput) : Message @AdminAuthDirective
+    createSong(album: String!, songData: SongInput) : Message @AdminAuthDirective
   }
 `
 
