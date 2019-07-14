@@ -76,8 +76,14 @@ const typeDefs = gql`
     adminSignup(data: AdminInput): Auth
     adminLogin(email: String!, password: String!): Auth
     createAlbum(artist: String!, albumData: AlbumInput) : Message @AdminAuthDirective
+    updateAlbum(album: String!, albumData: AlbumInput) : Message @AdminAuthDirective
+    deleteAlbum(album: String!) : Message @AdminAuthDirective
     createArtist(artistData: ArtistInput) : Message @AdminAuthDirective
+    updateArtist(artist: String!, artistData: ArtistInput) : Message @AdminAuthDirective
+    deleteArtist(artist: String!) : Message @AdminAuthDirective
     createSong(album: String!, songData: SongInput) : Message @AdminAuthDirective
+    updateSong(song: String!, songData: SongInput) : Message @AdminAuthDirective
+    deleteSong(song: String!) : Message @AdminAuthDirective
   }
 `
 

@@ -8,8 +8,30 @@ const createAlbumAction = (albumData) => {
   })
 }
 
+const updateAlbumAction = (album, albumData) => {
+  return new Promise((resolve, reject) => {
+    AlbumModel.findByIdAndUpdate(
+      album,
+      {
+        name: albumData.name,
+        bio: albumData.bio,
+        profile: albumData.profile
+      }
+    ).exec().then(() => {
+      resolve({message: "El artista ha sido actualizado"})
+    }).catch(err => reject(err))
+  })
+}
+
+const deleteAlbumAction = (album) => {
+  return new Promise((resolve, reject) => {
+    AlbumModel.findByIdAndDelete(album).exec().then(() => {
+      resolve({message: "El album ha sido elminado"})
+    }).catch(err => reject(err))
+  })
+}
+
 const addSongToAlbumAction = (songData, albumData) => {
-  console.log(songData)
   return new Promise((resolve, reject) => {
     AlbumModel.findByIdAndUpdate(
       albumData._id,
@@ -21,4 +43,9 @@ const addSongToAlbumAction = (songData, albumData) => {
   })
 }
 
-module.exports = { createAlbumAction, addSongToAlbumAction }
+module.exports = {
+  createAlbumAction,
+  updateAlbumAction,
+  deleteAlbumAction,
+  addSongToAlbumAction
+}

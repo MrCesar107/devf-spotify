@@ -12,13 +12,21 @@ const {
 } = require('../actions/adminActions')
 const {
   createAlbumAction,
+  updateAlbumAction,
+  deleteAlbumAction,
   addSongToAlbumAction
 } = require('../actions/albumActions')
 const {
   createArtistAction,
+  updateArtistAction,
+  deleteArtistAction,
   addAlbumToArtist
 } = require('../actions/artistActions')
-const { createSongAction } = require('../actions/songActions')
+const {
+  createSongAction,
+  updateSongAction,
+  deleteSongAction
+} = require('../actions/songActions')
 
 // importamos las utilidades
 const { storeUpload, musicStoreUpload } = require('../utils/uploader')
@@ -112,11 +120,37 @@ const resolvers = {
       ArtistModel.findById(args.artist).then((artist) => {
         return createAlbumAction(albumInfo).then(album => {
           return addAlbumToArtist(album, artist).then((message) => {
-            return (message)
+            return message
           })
         }).catch(err => {
           return err
         })
+      })
+    },
+
+    updateAlbum: async (parent, args, context, info) => {
+      const album = args.album
+      const { createReadStream } = await args.albumData.coverPage
+      const stream = createReadStream()
+      const { url } = await storeUpload(stream)
+      const albumInfo = {
+        name: args.albumData.name,
+        year: args.albumData.year,
+        coverPage: url
+      }
+      return updateAlbumAction(album, albumInfo).then((result) => {
+        return (result.message)
+      }).catch(err => {
+        return err
+      })
+    },
+
+    deleteAlbum: (parent, args, context, indo) => {
+      album = args.album
+      return deleteAlbumAction(album).then((result) => {
+        return result
+      }).catch(err => {
+        return err
       })
     },
 
@@ -139,6 +173,32 @@ const resolvers = {
       })
     },
 
+    updateArtist: async (parent, args, context, info) => {
+      const artist = args.artist
+      const { createReadStream } = await args.artistData.profile
+      const stream = createReadStream()
+      const { url } = await storeUpload(stream)
+      const artistInfo = {
+        name: args.artistData.name,
+        bio: args.artistData.bio,
+        profile: url
+      }
+      return updateArtistAction(artist, artistInfo).then(result => {
+        return result
+      }).catch(err => {
+        return err
+      })
+    },
+
+    deleteArtist: (parent, args, context, info) => {
+      artist = args.artist
+      return deleteArtistAction(artist).then((result) => {
+        return result
+      }).catch((err) => {
+        return err
+      })
+    },
+
     createSong: async (parent, args, context, info) => {
       const { createReadStream } = await args.songData.source
       const stream = createReadStream()
@@ -151,13 +211,39 @@ const resolvers = {
       }
       AlbumModel.findById(args.album).then((album) => {
         return createSongAction(songInfo).then(song => {
-          return addSongToAlbumAction(song, album)
-            .then((message) => {
-              return (message)
+          return addSongToAlbumAction(song, album).then((result) => {
+            return result
           })
         }).catch(err => {
           return err
         })
+      })
+    },
+
+    updateSong: async (parent, args, context, info) => {
+      const song = args.song
+      const { createReadStream } = await args.songData.source
+      const stream = createReadStream()
+      const { url } = await musicStoreUpload(stream)
+      const songInfo = {
+        name: args.songData.name,
+        artist: args.songData.artist,
+        source: url,
+        duration: ""
+      }
+      return updateSongAction(song, songInfo).then((result) => {
+        return result
+      }).catch(err => {
+        return err
+      })
+    },
+
+    deleteSong: (parent, args, context, info) => {
+      const song = args.song
+      return deleteSongAction(song).then((result) => {
+        return result
+      }).catch(err => {
+        return err
       })
     }
   }
