@@ -24,9 +24,24 @@ const typeDefs = gql`
   }
 
   type Artist {
+    id: ID
     name: String
     bio: String
     profile: String
+  }
+
+  type Album {
+    id: ID
+    name: String
+    year: String
+    coverPage: String
+  }
+
+  type Song {
+    id: ID
+    name: String,
+    source: String
+    duration: String
   }
 
   input UserInput {
@@ -67,7 +82,12 @@ const typeDefs = gql`
     queryWithLogin: Message @AuthDirective
     simpleQuery: Message
     getAdminArtists: [Artist] @AdminAuthDirective
-    getArtists: [Artist]
+    getArtists: [Artist] @AuthDirective
+    getAlbums: [Album] @AuthDirective
+    getAlbumsByArtist(artist: String!): [Album] @AuthDirective
+    getSongsByAlbum(album: String!): [Song] @AuthDirective
+    getArtistById(artist: String!): Artist @AuthDirective
+    getAlbumById(album: String!): Album @AuthDirective
   }
 
   type Mutation {

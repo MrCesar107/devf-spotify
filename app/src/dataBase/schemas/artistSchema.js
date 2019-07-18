@@ -15,10 +15,10 @@ const ArtistSchema = new Schema({
 		type: String
   },
 
-  albums: {
+  albums: [{
     type: Schema.Types.ObjectId,
     ref: 'albums'
-  }
+  }]
 })
 
 mongoose.Types.ObjectId.prototype.valueOf = function() {

@@ -16,10 +16,10 @@ const AlbumSchema = new Schema({
     type: String
   },
 
-  songs: {
+  songs: [{
     type: Schema.Types.ObjectId,
     ref: "songs"
-  }
+  }]
 })
 
 mongoose.Types.ObjectId.prototype.valueOf = function() {

@@ -18,6 +18,9 @@
     "url": "https://github.com/MrCesar107/devf-spotify/issues"
   },
   "homepage": "https://github.com/MrCesar107/devf-spotify#readme",
+  "engines": {
+    "node": "10.x"
+  },
   "dependencies": {
     "apollo-server": "^2.6.9",
     "apollo-server-express": "^2.6.9",

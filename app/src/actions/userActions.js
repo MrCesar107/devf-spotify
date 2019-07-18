@@ -39,7 +39,6 @@ const createToken = (userData) => {
 const signUpAction = (userData) => {
   return new Promise((resolve, reject) => {
     UserModel.create(userData).then(user => {
-      console.log("TCL: signupAction -> user", user)
       const token = createToken(user)
       resolve({ token, message: `se ha registrado al usuario ${user.name}` })
     }).catch(reject)

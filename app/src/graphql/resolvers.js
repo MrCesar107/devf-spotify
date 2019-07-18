@@ -48,6 +48,26 @@ const register = (admin) => {
   })
 }
 
+const registerAlbums = (artist) => {
+  return new Promise((resolve, reject) => {
+    ArtistModel.findById(artist).populate('albums').exec(
+      function (err, artistInfo) {
+        resolve(artistInfo)
+      }
+    )
+  })
+}
+
+const registerSongs = (album) => {
+  return new Promise((resolve, reject) => {
+    AlbumModel.findById(album).populate('songs').exec(
+      function (err, albumInfo) {
+        resolve(albumInfo)
+      }
+    )
+  })
+}
+
 const resolvers = {
 
   Query: {
@@ -68,7 +88,47 @@ const resolvers = {
 
     getArtists: (parent, args, context, info) => {
       return ArtistModel.find({}, (err, artists) => {
+        if (err) return err
         return artists
+      })
+    },
+
+    getAlbums: (parent, args, context, info) => {
+      return AlbumModel.find({}, (err, albums) => {
+        if (err) return err
+        return albums
+      })
+    },
+
+    getAlbumsByArtist: (parent, args, context, info) => {
+      artist = args.artist
+      return registerAlbums(artist).then(artistInfo => {
+        const data = artistInfo.albums
+        return data
+      })
+    },
+
+    getSongsByAlbum: (parent, args, context, info) => {
+      album = args.album
+      return registerSongs(album).then(albumInfo => {
+        const data = albumInfo.songs
+        return data
+      })
+    },
+
+    getArtistById: (parent, args, context, info) => {
+      artist = args.artist
+      return ArtistModel.findById(artist, (err, artist) => {
+        if (err) return err
+        return artist
+      })
+    },
+
+    getAlbumById: (parent, args, context, info) => {
+      album = args.album
+      return AlbumModel.findById(album, (err, album) => {
+        if (err) return err
+        return album
       })
     }
   },
