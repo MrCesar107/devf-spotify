@@ -36,6 +36,7 @@ mongo.on('open', () => console.log('Conectado !'))
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  playground: false,
   schemaDirectives: {
     AuthDirective: AuthDirective,
     AdminAuthDirective: AdminAuthDirective
@@ -44,6 +45,7 @@ const server = new ApolloServer({
 })
 
 // levanta el servidor
-server.listen().then(({ url }) => {
+const port = process.env.PORT || 8080
+server.listen(port).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`)
 })

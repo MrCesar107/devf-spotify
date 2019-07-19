@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/MrCesar107/devf-spotify#readme",
   "engines": {
-    "node": "10.x"
+    "node": ">=10.16.0",
+    "npm": "6.x"
   },
   "dependencies": {
     "apollo-server": "^2.6.9",
